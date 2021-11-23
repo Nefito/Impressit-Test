@@ -12,15 +12,15 @@ const movieGenres = [
 ];
 
 async function getMovie() {
-  const rl = readline.createInterface({
+  const readlineInstance = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
   return new Promise((resolve, reject) => {
       movieGenres.forEach((genre, index) => console.log(`[${index+1}] ${genre}`))
-      rl.question('Enter genre index: ', (answer) => {
-        rl.close();
+      readlineInstance.question('Enter genre index: ', (answer) => {
+        readlineInstance.close();
         if (isNaN(Number(answer))) {
           reject(new Error('Enter a number!'));
         }
@@ -30,7 +30,7 @@ async function getMovie() {
         resolve(movieGenres[Number(answer)-1]);
       });
   }).catch(e => {
-     console.log(e);
+     console.log('Error: ' + e);
      exit();
   })
 }
@@ -51,25 +51,25 @@ async function getMovie() {
     await headlessBrowser.close();
 
     const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
-    await page.goto('https://ebay.com');
-    await page.waitForSelector("[aria-label='Search for anything']");
-    await page.type("[aria-label='Search for anything']", `${movie.trim()} DVD`);
-    await page.keyboard.down("Enter");
-    await page.waitForSelector("li[data-view*='iid:1']");
-    await page.click("li[data-view*='iid:1'] [data-track*='luid:1']");
-    await page.waitForTimeout(3000);
+    const ebayPage = await browser.newPage();
+    await ebayPage.goto('https://ebay.com');
+    await ebayPage.waitForSelector("[aria-label='Search for anything']");
+    await ebayPage.type("[aria-label='Search for anything']", `${movie.trim()} DVD`);
+    await ebayPage.keyboard.down("Enter");
+    await ebayPage.waitForSelector("li[data-view*='iid:1']");
+    await ebayPage.click("li[data-view*='iid:1'] [data-track*='luid:1']");
+    await ebayPage.waitForTimeout(3000);
 
     const pages = await browser.pages();
 
-    const page2 = pages[pages.length - 1]
-    await page2.waitForSelector("#isCartBtn_btn");
-    await page2.click("#isCartBtn_btn");
-    await page2.waitForSelector("[data-test-id='cta-top']");
-    await page2.click("[data-test-id='cta-top']");
-    await page.waitForTimeout(2000);
-    await page2.waitForSelector('#gxo-btn');
-    await page2.click('#gxo-btn');
+    const movieDVDPage = pages[pages.length - 1]
+    await movieDVDPage.waitForSelector("#isCartBtn_btn");
+    await movieDVDPage.click("#isCartBtn_btn");
+    await movieDVDPage.waitForSelector("[data-test-id='cta-top']");
+    await movieDVDPage.click("[data-test-id='cta-top']");
+    await ebayPage.waitForTimeout(2000);
+    await movieDVDPage.waitForSelector('#gxo-btn');
+    await movieDVDPage.click('#gxo-btn');
   } catch (e) {
     console.log(e);
   }
