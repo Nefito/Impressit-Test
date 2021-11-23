@@ -1,6 +1,6 @@
-const { exit } = require('process');
-const puppeteer = require('puppeteer');
-const readline = require('readline');
+import { exit } from 'process';
+import puppeteer from 'puppeteer';
+import readline from 'readline';
 
 const movieGenres = [
   'Action',
@@ -11,13 +11,13 @@ const movieGenres = [
   'Western',
 ];
 
-async function getMovie() {
+async function getMovie(): Promise<string> {
   const readlineInstance = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
       movieGenres.forEach((genre, index) => console.log(`[${index+1}] ${genre}`))
       readlineInstance.question('Enter genre index: ', (answer) => {
         readlineInstance.close();
@@ -29,8 +29,8 @@ async function getMovie() {
         }
         resolve(movieGenres[Number(answer)-1]);
       });
-  }).catch(e => {
-     console.log('Error: ' + e);
+  }).catch((e: Error) => {
+     console.log(`${e.name}: ${e.message}`);
      exit();
   })
 }
@@ -43,11 +43,11 @@ async function getMovie() {
     const headlessBrowser = await puppeteer.launch();
     const rottenTomatoesPage = await headlessBrowser.newPage();
     await rottenTomatoesPage.goto('https://www.rottentomatoes.com/top');
-    await rottenTomatoesPage.waitForSelector(`a[href*=${String(genre).toLowerCase()}]`);
+    await rottenTomatoesPage.waitForSelector(`a[href*=${genre.toLowerCase()}]`);
     await rottenTomatoesPage.click(`a[href*=${String(genre).toLowerCase()}]`);
     await rottenTomatoesPage.waitForSelector('td a.articleLink');
     let element = await rottenTomatoesPage.$('td a.articleLink');
-    let movie = await rottenTomatoesPage.evaluate(el => el.textContent, element);
+    let movie: string = await rottenTomatoesPage.evaluate(el => el.textContent, element);
     await headlessBrowser.close();
 
     const browser = await puppeteer.launch({ headless: false });
