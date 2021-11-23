@@ -114,19 +114,16 @@ async function getMovie(): Promise<string> {
     await ebayPage.type("[aria-label='Search for anything']", `${movie.trim()} DVD`)
     await ebayPage.keyboard.down("Enter")
     await ebayPage.waitForSelector("li[data-view*='iid:1']")
-    await ebayPage.click("li[data-view*='iid:1'] a")
-    await ebayPage.waitForTimeout(3000)
-
-    const pages = await browser.pages()
-
-    const movieDVDPage = pages[pages.length - 1]
-    await movieDVDPage.waitForSelector("#isCartBtn_btn")
-    await movieDVDPage.click("#isCartBtn_btn")
-    await movieDVDPage.waitForSelector("[data-test-id='cta-top']")
-    await movieDVDPage.click("[data-test-id='cta-top']")
+    const movieLink = await ebayPage.$("li[data-view*='iid:1'] a") 
+    await ebayPage.evaluateHandle((el) => { el.target = '_self' }, movieLink)
+    movieLink?.click()
+    await ebayPage.waitForSelector("#isCartBtn_btn")
+    await ebayPage.click("#isCartBtn_btn")
+    await ebayPage.waitForSelector("[data-test-id='cta-top']")
+    await ebayPage.click("[data-test-id='cta-top']")
     await ebayPage.waitForTimeout(2000)
-    await movieDVDPage.waitForSelector('#gxo-btn')
-    await movieDVDPage.click('#gxo-btn')
+    await ebayPage.waitForSelector('#gxo-btn')
+    await ebayPage.click('#gxo-btn')
   } catch (e) {
     console.log(e)
   }
