@@ -108,10 +108,10 @@ async function getMovie(): Promise<string> {
       exit()
     })
     //wait for and then click on the genre the user has selected
-    await rottenTomatoesPage.waitForSelector(`a[href*='${baseGenreUrl}${genreUrl}/']`, { timeout: 15000 })
+    await rottenTomatoesPage.waitForSelector(`a[href*='${baseGenreUrl}${genreUrl}/']`)
       .catch(() => {
         rottenTomatoesPage.reload({ waitUntil: 'load' })
-      }).finally(() => {
+      }).catch(() => {
         console.log('Could not find the selected genre')
         exit()
       })
@@ -132,12 +132,12 @@ async function getMovie(): Promise<string> {
         exit()
       })
     //search for item
-    await ebayPage.waitForSelector("[aria-label='Search for anything']", { timeout: 15000 })
+    await ebayPage.waitForSelector("[aria-label='Search for anything']")
     await ebayPage.type("[aria-label='Search for anything']", `${movie.trim()} DVD`)
     await ebayPage.keyboard.down("Enter")
     //open the first items page
     await ebayPage.waitForSelector("li[data-view*='iid:1']").catch(() => ebayPage.reload({ waitUntil: 'load' }))
-    .finally(() => {
+    .catch(() => {
       console.log('There are no items or they have not loaded properly')
       exit()
     })
@@ -147,14 +147,14 @@ async function getMovie(): Promise<string> {
     movieLink?.click()
     //add item to cart
     await ebayPage.waitForSelector("#isCartBtn_btn").catch(() => ebayPage.reload({ waitUntil: 'load' }))
-    .finally(() => {
+    .catch(() => {
       console.log("There seems to be a problem with the add to cart button")
       exit()
     })
     await ebayPage.click("#isCartBtn_btn")
     //go to checkout page
     await ebayPage.waitForSelector("[data-test-id='cta-top']").catch(() => ebayPage.reload({ waitUntil: 'load' }))
-    .finally(() => {
+    .catch(() => {
       console.log("There seems to be a problem with the checkout button")
       exit()
     })
@@ -169,6 +169,7 @@ async function getMovie(): Promise<string> {
       console.log('Oops! We encountered a captcha! Please fill in the captcha to continue to checkout page.')
     }
   } catch (e) {
-    console.log(`${e.name}: ${e.message}`)
+    let error = e as Error
+    console.log(`${error.name}: ${error.message}`)
   }
 })()
