@@ -10,6 +10,10 @@ export const movieGenres: { name: string, url: string }[] = [
     url: 'animation_movies',
   },
   {
+    name: 'Art House & International',
+    url: 'art_house__international',
+  },
+  {
     name: 'Classics',
     url: 'classics_movies',
   },
@@ -24,6 +28,10 @@ export const movieGenres: { name: string, url: string }[] = [
   {
     name: 'Drama',
     url: 'drama_movies',
+  },
+  {
+    name: 'Horror',
+    url: 'horror_movies',
   },
   {
     name: 'Kids & Family',
