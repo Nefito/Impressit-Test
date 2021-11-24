@@ -30,14 +30,14 @@ async function getMovie(): Promise<string> {
 
 (async () => {
 
-  let genreUrl = await getMovie()
+  let genreUrl: string = await getMovie()
 
   try {
 
     //go to RottenTomatoes to find the top movie and get its title
 
-    const headlessBrowser = await puppeteer.launch()
-    const rottenTomatoesPage = await headlessBrowser.newPage()
+    const headlessBrowser: puppeteer.Browser = await puppeteer.launch()
+    const rottenTomatoesPage: puppeteer.Page = await headlessBrowser.newPage()
     await rottenTomatoesPage.goto('https://www.rottentomatoes.com/top', { waitUntil: 'load' })
       .catch(() => {
       console.log('Failed to load the page')
@@ -54,14 +54,14 @@ async function getMovie(): Promise<string> {
     await rottenTomatoesPage.click(`a[href*='${baseGenreUrl}${genreUrl}/']`)
     await rottenTomatoesPage.waitForSelector('td a.articleLink')
     //get our movie title from its html element
-    const element = await rottenTomatoesPage.$('td a.articleLink')
+    const element: puppeteer.ElementHandle<Element> = await rottenTomatoesPage.$('td a.articleLink')
     const movie: string = await rottenTomatoesPage.evaluate(el => el.textContent, element)
     await headlessBrowser.close()
 
     //go to ebay to find and buy the DVD of the movie we saved
 
-    const browser = await puppeteer.launch({ headless: false })
-    const ebayPage = await browser.newPage()
+    const browser: puppeteer.Browser = await puppeteer.launch({ headless: false })
+    const ebayPage: puppeteer.Page = await browser.newPage()
     await ebayPage.goto('https://ebay.com')
       .catch(() => {
         console.log('Failed to load the page')
@@ -77,7 +77,7 @@ async function getMovie(): Promise<string> {
       console.log('There are no items or they have not loaded properly')
       exit()
     })
-    const movieLink = await ebayPage.$("li[data-view*='iid:1'] a") 
+    const movieLink: puppeteer.ElementHandle<Element> = await ebayPage.$("li[data-view*='iid:1'] a") 
     //here I stop the link from opening in a new tab
     await ebayPage.evaluateHandle((el) => { el.target = '_self' }, movieLink)
     movieLink?.click()
