@@ -1,3 +1,5 @@
+export const baseGenreUrl = '/top/bestofrt/top_100_'
+
 export const movieGenres: { name: string, url: string }[] = [
   {
     name: 'Action & Adventures',

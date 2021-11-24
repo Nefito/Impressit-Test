@@ -2,9 +2,7 @@ import { exit } from 'process'
 import puppeteer from 'puppeteer'
 import readline from 'readline'
 
-import { movieGenres } from './consts'
-
-const baseGenreUrl = '/top/bestofrt/top_100_'
+import { movieGenres, baseGenreUrl } from './consts'
 
 async function getMovie(): Promise<string> {
   const readlineInstance = readline.createInterface({
