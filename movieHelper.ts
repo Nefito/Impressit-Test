@@ -58,7 +58,7 @@ async function getMovie(): Promise<string> {
     const movie: string = await rottenTomatoesPage.evaluate(el => el.textContent, element)
     await headlessBrowser.close()
 
-    //go to ebay ti find and buy the DVD of the movie we saved
+    //go to ebay to find and buy the DVD of the movie we saved
 
     const browser = await puppeteer.launch({ headless: false })
     const ebayPage = await browser.newPage()
