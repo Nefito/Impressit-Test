@@ -4,4 +4,4 @@ This app will help you to choose and buy a movie DVD from Ebay.com. First you se
 
 Launching the script
 1. To install the dependencies run command ```npm install``` or ```yarn install``` 
-2. Use the command ```yarn start``` to launch the script! 
+2. Use the command ```yarn start``` or ```npm start``` to launch the script! 
