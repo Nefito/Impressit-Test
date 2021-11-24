@@ -54,7 +54,7 @@ async function getMovie(): Promise<string> {
     await rottenTomatoesPage.click(`a[href*='${baseGenreUrl}${genreUrl}/']`)
     await rottenTomatoesPage.waitForSelector('td a.articleLink')
     //get our movie title from its html element
-    const element: puppeteer.ElementHandle<Element> = await rottenTomatoesPage.$('td a.articleLink')
+    const element: puppeteer.ElementHandle<Element> | null = await rottenTomatoesPage.$('td a.articleLink')
     const movie: string = await rottenTomatoesPage.evaluate(el => el.textContent, element)
     await headlessBrowser.close()
 
@@ -77,7 +77,7 @@ async function getMovie(): Promise<string> {
       console.log('There are no items or they have not loaded properly')
       exit()
     })
-    const movieLink: puppeteer.ElementHandle<Element> = await ebayPage.$("li[data-view*='iid:1'] a") 
+    const movieLink: puppeteer.ElementHandle<Element> | null = await ebayPage.$("li[data-view*='iid:1'] a") 
     //here I stop the link from opening in a new tab
     await ebayPage.evaluateHandle((el) => { el.target = '_self' }, movieLink)
     movieLink?.click()
