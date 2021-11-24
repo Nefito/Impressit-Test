@@ -15,12 +15,12 @@ async function getMovie(): Promise<string> {
       readlineInstance.question('Enter genre index: ', (answer) => {
         readlineInstance.close()
         if (isNaN(Number(answer))) {
-          reject(new Error('Enter a number!'))
+          return reject(new Error('Enter a number!'))
         }
         else if (Number(answer) < 1 || Number(answer) > movieGenres.length) {
-          reject(new Error('Index out of bonds'))
+          return reject(new Error('Index out of bonds'))
         }
-        resolve(movieGenres[Number(answer) - 1].url)
+        return resolve(movieGenres[Number(answer) - 1].url)
       })
   }).catch((e: Error) => {
      console.log(`${e.name}: ${e.message}`)

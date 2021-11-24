@@ -11,7 +11,7 @@ export const movieGenres: { name: string, url: string }[] = [
   },
   {
     name: 'Art House & International',
-    url: 'art_house__international',
+    url: 'art_house__international_movies',
   },
   {
     name: 'Classics',
